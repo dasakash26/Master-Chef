@@ -18,7 +18,7 @@ Discover and explore recipes from various cuisines with this web application bui
 
 ## Getting Started 🚀
 
-1. **Clone the Repository:**
+1. **Clone the Repository**
 2. **install dependencies (npm i)**
 3. **Set Up Environment Variables (for reference check .env.example)**
 4. **start the application at localhost(port:4000) using : npm start**
