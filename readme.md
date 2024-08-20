@@ -15,6 +15,8 @@ Discover and explore recipes from various cuisines with this web application bui
 - **Express.js**: Framework for building the server.
 - **EJS**: Templating engine for rendering views.
 - **Axios**: HTTP client for API requests.
+- **Bootstrap**: CSS framework for responsive design and styling.
+
 
 ## Getting Started 🚀
 
