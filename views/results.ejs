@@ -1,0 +1,41 @@
+<%- include("partials/header.ejs") %>
+
+<% if (content && content.results && content.results.length > 0) { %>
+  <h1 style="text-align: center"><%= searched %></h1>
+  <div class="cards-container">
+    <% content.results.forEach(recipe => { %>
+      <div class="card">
+        <img
+          src="<%= recipe.image %>"
+          class="card-img-top"
+          alt="<%= recipe.title %>"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= recipe.title %></h5>
+          <form
+            class="d-flex search"
+            role="search"
+            method="GET"
+            action="/recipe-details"
+          >
+            <input type="hidden" name="recipeId" value="<%= recipe.id %>" />
+            <input type="hidden" name="recipeImg" value="<%= recipe.image %>" />
+            <input type="hidden" name="recipeTitle" value="<%= recipe.title %>" />
+            <button class="btn btn-outline-success" type="submit">
+              View Details
+            </button>
+          </form>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <h1 style="text-align: center">No results found for <%= searched || 'your search' %>.</h1>
+<% } %>
+
+<% if (errs) { %>
+  <h2 style="text-align: center"><%= errs %></h2>
+<% } %>
+
+<%- include("partials/footer.ejs") %>

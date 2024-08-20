@@ -1,0 +1,45 @@
+<%- include("partials/header.ejs") %>
+
+<% if (locals.content) { %>
+  <div class="container mt-5">
+    <!-- Recipe Image -->
+    <div class="recipe-image text-center mb-4">
+      <img src="<%= img %>" alt="<%= title %>" class="img-fluid rounded" style="max-height: 400px; object-fit: cover; border: 3px solid #ddd;" />
+    </div>
+    <h1 class="text-center mb-4" style="color: #333; font-size: 2.5rem;"><%= title %></h1>
+    <!-- Ingredients and Instructions -->
+    <div class="row">
+      <!-- Ingredients Card -->
+      <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm" style="background-color: #faf3e0; border-radius: 10px;">
+          <div class="card-body">
+            <h5 class="card-title" style="color: #ff7f50; font-size: 1.75rem;">Ingredients</h5>
+            <ul class="list-group list-group-flush">
+              <% content.extendedIngredients.forEach(ingredient => { %>
+                <li class="list-group-item" style="background-color: transparent; color: #555; font-size: 1.25rem;"><%= ingredient.original %></li>
+              <% }); %>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Instructions Card -->
+      <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm" style="background-color: #e0f7fa; border-radius: 10px;">
+          <div class="card-body">
+            <h5 class="card-title" style="color: #ff7f50; font-size: 1.75rem;">Instructions</h5>
+            <p class="card-text" style="color: #555; font-size: 1.25rem;"><%- content.instructions %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } else { %>
+  <div class="container text-center mt-5">
+    <h1 style="color: #ff6f61; font-size: 2rem;">No details found.</h1>
+    <% if (locals.errs) { %>
+      <h2 style="color: #ff3d3d; font-size: 1.5rem;"><%= errs %></h2>
+    <% } %>
+  </div>
+<% } %>
+
+<%- include("partials/footer.ejs") %>
