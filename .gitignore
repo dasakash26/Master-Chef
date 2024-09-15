@@ -3,6 +3,7 @@ node_modules/
 npm-debug.log
 yarn-error.log
 .env
+package-lock.json
 
 # Build output
 /dist
@@ -30,6 +31,7 @@ Thumbs.db
 *.swp
 
 # Environment-specific files
+.env
 .env.local
 .env.development.local
 .env.test.local
