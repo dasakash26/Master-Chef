@@ -14,14 +14,19 @@
     </div>
     <div class="col-lg-6">
       <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
-        Welcome to Master Chef
+        Welcome to Master Chef, <% if(locals.name){ %> <%=name%> <% } %>
       </h1>
       <p class="lead">
         Discover the art of cooking with our expertly crafted recipes,
         step-by-step guides, and culinary tips. Whether you're a beginner or a
         seasoned chef, Master Chef is your ultimate kitchen companion.
       </p>
-      <form class="d-flex search" role="search" method="GET" action="/search-results">
+      <form
+        class="d-flex search"
+        role="search"
+        method="GET"
+        action="/search-results"
+      >
         <input
           class="form-control searchBar"
           type="search"
@@ -29,13 +34,8 @@
           aria-label="Search"
           name="recipes"
         />
-        <button
-          class="btn btn-outline-success"
-          type="submit"
-        >
-          Search
-        </button>
-      </form>      
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </div>
@@ -48,4 +48,5 @@
     }, 800);
   });
 </script>
+
 <%- include("partials/footer.ejs") %>

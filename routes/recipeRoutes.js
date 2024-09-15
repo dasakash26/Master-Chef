@@ -8,7 +8,7 @@ import { isAuthenticated } from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.get("/", renderDashboard);
+router.get("/", isAuthenticated, renderDashboard);
 router.get("/search-results", isAuthenticated, searchRecipes);
 router.get("/recipe-details", isAuthenticated, recipeDetails);
 
