@@ -29,6 +29,7 @@ import {
 const router = express.Router();
 
 router.get("/data", async (req, res) => {
+  console.log(connectionString);
   try {
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS users (
