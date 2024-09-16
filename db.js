@@ -2,16 +2,10 @@ import pg from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
+const connectionString = 'postgres://avnadmin:AVNS_3V9J9tjyrSYN4kEcqV7@pg-1e47dd16-masterchef.c.aivencloud.com:20585/defaultdb?sslmode=require';
 
-const pool = new pg.Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-  max: 20, // Max number of clients in the pool
-  idleTimeoutMillis: 30000, 
-  connectionTimeoutMillis: 2000,
+const db = new pg.Client({
+  connectionString: connectionString,
 });
 
-export default pool;
+export default db;

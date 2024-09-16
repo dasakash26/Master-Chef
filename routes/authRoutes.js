@@ -1,5 +1,5 @@
 import express from "express";
-import db from "../db.js";
+import pool from "../db.js";
 
 import {
   renderLogin,
@@ -11,26 +11,30 @@ import {
 
 const router = express.Router();
 
-// router.get("/data", async (req, res) => {
-//   try {
-//     const createTableQuery = `
-//       CREATE TABLE users (
-//         id SERIAL PRIMARY KEY,
-//         name VARCHAR(50) NOT NULL,
-//         username VARCHAR(50) UNIQUE NOT NULL,
-//         password TEXT NOT NULL,
-//         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-//       );
-//     `;
-//     console.log("testing1");
-//     await db.query(createTableQuery);
-//     console.log("testing2");
-//     res.json({ done });
-//   } catch (error) {
-//     console.error("Error creating table:", error.message);
-//     res.status(500).send("Error creating table");
-//   }
-// });
+router.get("/data", async (req, res) => {
+  try {
+    const createTableQuery = `
+      CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
+    console.log("Starting table creation");
+
+    await pool.query(createTableQuery); 
+
+    console.log("Table creation completed");
+
+    res.json({ message: "Table created successfully" }); // Corrected the response
+  } catch (error) {
+    console.error("Error creating table:", error.message);
+    res.status(500).send("Error creating table");
+  }
+});
 
 router.get("/login", renderLogin);
 router.post("/login", loginUser);
