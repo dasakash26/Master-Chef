@@ -1,20 +1,23 @@
 import express from "express";
 import pg from "pg";
+// import pem from '../public/'
 
-const connectionString = 'postgres://postgres:mysceretpassword@localhost:5432/postgres';
+const connectionString = '';
 
 const db = new pg.Client({
   connectionString: connectionString,
 });
 
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Failed to connect to the database:', err.message);
-  } else {
-    console.log('Successfully connected to the database');
+async function connectToDB() {
+  try {
+    await db.connect();
+    console.log("Successfully connected to the database");
+  } catch (err) {
+    console.error("Failed to connect to the database:", err.message);
+    process.exit(1); 
   }
-});
+}
+await connectToDB();  
 
 import {
   renderLogin,
@@ -38,7 +41,9 @@ router.get("/data", async (req, res) => {
       );
     `;
     console.log("Starting table creation");
-    await db.query(createTableQuery);  // Ensure the query is executed after connection
+
+    await db.query(createTableQuery);
+
     console.log("Table creation successful");
     res.json({ message: "Table created successfully" });
   } catch (error) {

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import pg from "pg";
-const connectionString = 'postgres://postgres:mysceretpassword@localhost:5432/postgres';
+const connectionString = '';
 
 const db = new pg.Client({
   connectionString: connectionString,
