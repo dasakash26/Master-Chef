@@ -2,13 +2,16 @@ import bcrypt from "bcrypt";
 import db from "../db.js";
 
 //db connection
-db.connect((err) => {
-  if (err) {
-    console.error("Failed to connect to the database:", err.message);
-  } else {
+async function connectToDB() {
+  try {
+    await db.connect();
     console.log("Successfully connected to the database");
+  } catch (err) {
+    console.error("Failed to connect to the database:", err.message);
+    process.exit(1);
   }
-});
+}
+await connectToDB();
 
 // Render login page
 const renderLogin = (req, res) => {
@@ -21,10 +24,9 @@ const loginUser = async (req, res) => {
   console.log(`>> ${username} tried to log in.`);
 
   try {
-    const result = await db.query(
-      "SELECT * FROM users WHERE username = $1",
-      [username]
-    );
+    const result = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
     const user = result.rows[0];
     if (user && (await bcrypt.compare(password, user.password))) {
       req.session.user = {
@@ -41,7 +43,7 @@ const loginUser = async (req, res) => {
   } catch (error) {
     console.error("Database query error:", error.message);
     res.render("login", { err: "An error occurred during login !!" });
-  } 
+  }
 };
 
 // Render registration page
@@ -60,10 +62,9 @@ const registerUser = async (req, res) => {
     console.log(`>> login attempt : ${name} mail: ${username}`);
 
     //check if user exists
-    const result = await db.query(
-      "SELECT * FROM users WHERE username = $1",
-      [username]
-    );
+    const result = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
 
     const existingUser = result.rows[0];
 
@@ -93,7 +94,7 @@ const isAuthenticated = (req, res, next) => {
   res.redirect("/login");
 };
 
-db.end();
+// db.end();
 
 export {
   renderLogin,

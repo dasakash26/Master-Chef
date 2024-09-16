@@ -9,15 +9,18 @@ import {
   isAuthenticated,
 } from "../controllers/authController.js";
 
-const router = express.Router();
-
-db.connect((err) => {
-  if (err) {
-    console.error("Failed to connect to the database:", err.message);
-  } else {
+async function connectToDB() {
+  try {
+    await db.connect();
     console.log("Successfully connected to the database");
+  } catch (err) {
+    console.error("Failed to connect to the database:", err.message);
+    process.exit(1);
   }
-});
+}
+await connectToDB();
+
+const router = express.Router();
 
 router.get("/data", async (req, res) => {
   try {
@@ -33,7 +36,7 @@ router.get("/data", async (req, res) => {
 
     console.log("Starting table creation");
 
-    await db.query(createTableQuery); 
+    await db.query(createTableQuery);
 
     console.log("Table creation completed");
 
