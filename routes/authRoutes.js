@@ -1,5 +1,5 @@
 import express from "express";
-import pool from "../db.js";
+import db from "../db.js";
 
 import {
   renderLogin,
@@ -18,10 +18,11 @@ db.connect((err) => {
     console.log("Successfully connected to the database");
   }
 });
+
 router.get("/data", async (req, res) => {
   try {
     const createTableQuery = `
-      CREATE TABLE users (
+      CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         username VARCHAR(50) UNIQUE NOT NULL,
@@ -32,7 +33,7 @@ router.get("/data", async (req, res) => {
 
     console.log("Starting table creation");
 
-    await pool.query(createTableQuery); 
+    await db.query(createTableQuery); 
 
     console.log("Table creation completed");
 
