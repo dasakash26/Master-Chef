@@ -1,7 +1,9 @@
-import pg from 'pg';
+import pg from "pg";
+import dotenv from "dotenv";
+dotenv.config();
 
-// Hardcoded connection string
-const connectionString = 'postgres://postgres:mysceretpassword@localhost:5432/postgres';
+const connectionString = process.env.DB_STR;
+console.log(connectionString);
 
 const db = new pg.Client({
   connectionString: connectionString,

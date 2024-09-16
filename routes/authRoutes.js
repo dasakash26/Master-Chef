@@ -1,7 +1,9 @@
 import express from "express";
 import pg from "pg";
+import dotenv from "dotenv";
+dotenv.config();
 
-const connectionString = 'postgres://postgres:mysceretpassword@localhost:5432/postgres';
+const connectionString = process.env.DB_STR;
 
 const db = new pg.Client({
   connectionString: connectionString,
@@ -10,9 +12,9 @@ const db = new pg.Client({
 // Connect to the database
 db.connect((err) => {
   if (err) {
-    console.error('Failed to connect to the database:', err.message);
+    console.error("Failed to connect to the database:", err.message);
   } else {
-    console.log('Successfully connected to the database');
+    console.log("Successfully connected to the database");
   }
 });
 
@@ -38,7 +40,7 @@ router.get("/data", async (req, res) => {
       );
     `;
     console.log("Starting table creation");
-    await db.query(createTableQuery);  // Ensure the query is executed after connection
+    await db.query(createTableQuery); // Ensure the query is executed after connection
     console.log("Table creation successful");
     res.json({ message: "Table created successfully" });
   } catch (error) {

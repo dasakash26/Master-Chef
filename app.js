@@ -5,7 +5,7 @@ import recipeRoutes from "./routes/recipeRoutes.js";
 
 const app = express();
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.SERVER_PORT;
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
