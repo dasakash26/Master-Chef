@@ -11,6 +11,13 @@ import {
 
 const router = express.Router();
 
+db.connect((err) => {
+  if (err) {
+    console.error("Failed to connect to the database:", err.message);
+  } else {
+    console.log("Successfully connected to the database");
+  }
+});
 router.get("/data", async (req, res) => {
   try {
     const createTableQuery = `
