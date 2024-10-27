@@ -1,17 +1,6 @@
 import bcrypt from "bcrypt";
-import db from "../db.js";
-
-//db connection
-async function connectToDB() {
-  try {
-    await db.connect();
-    console.log("Successfully connected to the database");
-  } catch (err) {
-    console.error("Failed to connect to the database:", err.message);
-    process.exit(1);
-  }
-}
-await connectToDB();
+import db from "../utils/db.js";
+import { v4 as randomUUID } from "uuid";
 
 // Render login page
 const renderLogin = (req, res) => {
@@ -28,21 +17,22 @@ const loginUser = async (req, res) => {
       username,
     ]);
     const user = result.rows[0];
+
     if (user && (await bcrypt.compare(password, user.password))) {
       req.session.user = {
         id: user.id,
         name: user.name,
         username: user.username,
       };
-      res.redirect("/");
       console.log(`>> ${username} logged in successfully`);
+      return res.redirect("/");
     } else {
-      console.log(`>> user ${username} login failed!!`);
-      res.render("login", { err: "invalid username or password !!" });
+      console.log(`>> Login failed for user: ${username}`);
+      return res.render("login", { err: "Invalid username or password!" });
     }
   } catch (error) {
     console.error("Database query error:", error.message);
-    res.render("login", { err: "An error occurred during login !!" });
+    return res.render("login", { err: "An error occurred during login!" });
   }
 };
 
@@ -59,13 +49,13 @@ const registerUser = async (req, res) => {
     if (password !== confirmPassword) {
       return res.render("register", { err: "Passwords didn't match!" });
     }
-    console.log(`>> login attempt : ${name} mail: ${username}`);
 
-    //check if user exists
+    console.log(`>> Registration attempt for name: ${name}, username: ${username}`);
+
+    // Check if user exists
     const result = await db.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
-
     const existingUser = result.rows[0];
 
     if (existingUser) {
@@ -73,16 +63,18 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    //store user detail into db
+    // Store user details in the database
     await db.query(
-      "INSERT INTO users (name, username, password) VALUES ($1, $2, $3)",
-      [name, username, hashedPassword]
+      "INSERT INTO users (id, name, username, password) VALUES ($1, $2, $3, $4)",
+      [randomUUID(), name, username, hashedPassword]
     );
-    res.redirect("/login");
-    console.log(`>> user: ${name} registered successfully`);
+    console.log(`>> User registered successfully: ${name}`);
+    return res.redirect("/login");
   } catch (error) {
-    console.error("Database query error:", error);
-    res.send("An error occurred during registration");
+    console.error("Database query error:", error.message);
+    return res.render("register", {
+      err: "An error occurred during registration",
+    });
   }
 };
 
@@ -93,8 +85,6 @@ const isAuthenticated = (req, res, next) => {
   }
   res.redirect("/login");
 };
-
-// db.end();
 
 export {
   renderLogin,
